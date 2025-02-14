@@ -1,35 +1,44 @@
 import { defineState } from '@lwc/state'
 
+// the shop only sells 3 kinds of things
+export const items = ['shirt', 'hat', 'boots']
+
+// but they come in lots of colors
 export const colors = [
     'aqua', 'blue', 'chartreuse', 'coral', 'gold',
     'green', 'lavender', 'magenta', 'orange', 'plum',
     'red', 'salmon', 'teal', 'yellow'
 ]
-export const items = ['shirt', 'hat', 'boots']
 
+// base type
 type ItemColor = {
     item: string,
     color: string,
 }
 
+// an item the store sells
 type Item = ItemColor & {
     price: number,
 }
 
+// what's on sale right now
 type Sale = ItemColor & {
     discount: number,
 }
 
+// items in the user's cart
 type Cart = {
     items: Item[]
 }
 
 const randomInt = max => Math.floor(Math.random() * max)
 
+// regular price for an item in a given color
 const price = ({ item, color }) =>
     (items.indexOf(item) + 1) * 20 + (colors.indexOf(color) + 1) * 2
 
-const sale = (item_?: string, color_?: string, discount_?: number) => {
+// constructs a Sale, either randomly or from the given arguments
+const sale = (item_?: string, color_?: string, discount_?: number): Sale => {
   const item = item_ || randomInt(4) < 1 ? '*' : items[randomInt(items.length)]
   const color = color_ || randomInt(4) < 1 ? '*' : colors[randomInt(colors.length)]
   const discount = discount_ || (randomInt(4) + 1) / 10
@@ -38,19 +47,21 @@ const sale = (item_?: string, color_?: string, discount_?: number) => {
       item,
       color,
       discount
-  } as Sale
+  }
 }
 
-export const myShopStateManager = defineState((atom, computed, update, _fromContext) => () => {
+// Creator function for the state manager for the shop. Each invocation of this function
+// creates a new set of state information.
+export const createShopStateManager = defineState((atom, computed, update, _fromContext) => () => {
     // item currently selected
-    const currentItem = atom({
+    const currentItem = atom<Item>({
         item: items[0],
         color: colors[0],
         price: price({ item: items[0], color: colors[0] }),
-    } as Item)
+    })
 
     // what's currently on sale
-    const currentSale = atom(sale())
+    const currentSale = atom<Sale>(sale())
 
     // price of the current item, taking currentSale into account
     const currentItemPrice = computed(
@@ -65,7 +76,7 @@ export const myShopStateManager = defineState((atom, computed, update, _fromCont
     // change what's on sale, either randomly or to the specified item(s)
     const changeSale = update(
         { currentSale },
-        ({ currentSale: _ }, item?: string, color?: string, discount?: number) => ({
+        (_, item?: string, color?: string, discount?: number) => ({
             currentSale: sale(item, color, discount)
         })
     )
@@ -73,7 +84,7 @@ export const myShopStateManager = defineState((atom, computed, update, _fromCont
     // change the currently selected item
     const selectItem = update(
         { currentItem },
-        ({ currentItem: _ }, item: string, color: string) => ({
+        (_, item: string, color: string) => ({
             currentItem: {
                 item,
                 color,
@@ -83,9 +94,9 @@ export const myShopStateManager = defineState((atom, computed, update, _fromCont
     )
 
     // current cart
-    const cart = atom({
+    const cart = atom<Cart>({
         items: []
-    } as Cart)
+    })
 
     // add current item to cart
     const addToCart = update(
@@ -127,4 +138,4 @@ export const myShopStateManager = defineState((atom, computed, update, _fromCont
     }
 })
 
-export default myShopStateManager
+export default createShopStateManager

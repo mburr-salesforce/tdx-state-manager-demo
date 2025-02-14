@@ -1,14 +1,15 @@
 import { LightningElement } from "lwc"
 
 export default class Cart extends LightningElement {
-    stateManager = window.stateManager
+    // temporary hack until fromContext() is available
+    shopState = window.shopState
 
     get itemsInCart() {
-        const items = this.stateManager.value.cart.items.length
-        return `${items} item${items !== 1 ? 's' : ''}`
+        const itemCount = this.shopState.value.cart.items.length
+        return `${itemCount} item${itemCount !== 1 ? 's' : ''}`
     }
 
     get cartTotal() {
-        return `$${this.stateManager.value.cartTotal.toFixed(2)}`
+        return `$${this.shopState.value.cartTotal.toFixed(2)}`
     }
 }

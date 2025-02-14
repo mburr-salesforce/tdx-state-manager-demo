@@ -1,16 +1,21 @@
 import { LightningElement } from 'lwc';
-import myShopStateManager from '../../../state.ts';
+import createShopStateManager from 'x/shopState';
 
 export default class App extends LightningElement {
-    stateManager = myShopStateManager()
+    shopState = createShopStateManager()
 
     constructor() {
         super()
-        window.stateManager = this.stateManager
-        setInterval(() => { window.stateManager.value.changeSale() }, 5000)
+        // Using the window to share the state manager is a temporary hack. Child
+        // components will eventually be able to retrieve it from their context
+        // or receive it as a property value.
+        window.shopState = this.shopState
+
+        // change what's on sale every 10s
+        setInterval(() => { window.shopState.value.changeSale() }, 10000)
     }
 
     selectGreenBoots() {
-        this.stateManager.value.selectItem('boots', 'green')
+        this.shopState.value.selectItem('boots', 'green')
     }
 }
