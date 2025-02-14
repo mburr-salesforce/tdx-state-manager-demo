@@ -1,10 +1,14 @@
 <template>
-    <div>
-        Blue message: {blue.value.birthdayInfo}
-    </div>
-    <div>
-        Green message: {green.value.birthdayInfo}
-    </div>
-    <button onclick={clickBlue}>Graduate Blue</button>
-    <button onclick={clickGreen}>Birthday Green</button>
+    <x-header></x-header>
+    <hr/>
+    <x-details></x-details>
+    <hr/>
+    <x-footer></x-footer>
+
+    <x-itemimage></x-itemimage>
+    <br/><br/><br/>
+
+    Demo tools:<br/>
+    <button onclick={stateManager.value.emptyCart}>Empty cart</button>&nbsp;
+    <button onclick={selectGreenBoots}>Select green boots</button>&nbsp;
 </template>

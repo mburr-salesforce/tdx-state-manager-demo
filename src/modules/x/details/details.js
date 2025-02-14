@@ -19,12 +19,11 @@ export default class Details extends LightningElement {
         }))
     }
 
-    get colors() {
-        return colors
-    }
-
-    get items() {
-        return items
+    get itemOptions() {
+        return ['hat', 'shirt', 'boots'].map(i => ({
+            name: i,
+            selected: i === this.stateManager.value.currentItem.item,
+        }))
     }
 
     get strikethroughPrice() {
@@ -44,18 +43,6 @@ export default class Details extends LightningElement {
         return `$${this.stateManager.value.currentItemPrice.toFixed(2)}`
     }
 
-    styleFor(item) {
-        const ci = this.stateManager.value.currentItem
-        return `fill: ${ci.color}; stroke: ${ci.color}; display: ${ci.item === item ? 'inline' : 'none'};`
-    }
-
-    get iconStyles() {
-        return {
-            hat: this.styleFor('hat'),
-            shirt: this.styleFor('shirt'),
-            boots: this.styleFor('boots'),
-        }
-    }
 
     isCurrentColor(color) {
         return color === this.stateManager.value.currentItem.color

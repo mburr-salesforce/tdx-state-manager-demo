@@ -1,3 +1,8 @@
+:host {
+    display: flex;
+    justify-content: center;
+}
+
 span.sale-message {
     font-size: 36px;
 }
