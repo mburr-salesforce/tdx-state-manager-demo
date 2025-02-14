@@ -20,7 +20,7 @@ export default class Details extends LightningElement {
     }
 
     get itemOptions() {
-        return ['hat', 'shirt', 'boots'].map(i => ({
+        return items.map(i => ({
             name: i,
             selected: i === this.stateManager.value.currentItem.item,
         }))
@@ -43,8 +43,16 @@ export default class Details extends LightningElement {
         return `$${this.stateManager.value.currentItemPrice.toFixed(2)}`
     }
 
+    styleFor(item) {
+        const ci = this.stateManager.value.currentItem
+        return `fill: ${ci.color}; stroke: ${ci.color}; display: ${ci.item === item ? 'inline' : 'none'};`
+    }
 
-    isCurrentColor(color) {
-        return color === this.stateManager.value.currentItem.color
+    get iconStyles() {
+        return {
+            hat: this.styleFor('hat'),
+            shirt: this.styleFor('shirt'),
+            boots: this.styleFor('boots'),
+        }
     }
 }

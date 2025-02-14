@@ -1,4 +1,20 @@
+div.image {
+    display: inline-block;
+    padding: 20px;
+}
+
 svg {
-    height: 64px;
-    width: 64px;
+    height: 128px;
+    width: 128px;
+}
+
+div.info {
+    display: inline-block;
+    padding: 20px;
+}
+
+div.price {
+    font-size: 24px;
+    padding-top: 20px;
+    padding-bottom: 20px;
 }
