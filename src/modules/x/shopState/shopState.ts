@@ -39,8 +39,8 @@ const price = ({ item, color }) =>
 
 // constructs a Sale, either randomly or from the given arguments
 const sale = (item_?: string, color_?: string, discount_?: number): Sale => {
-  const item = item_ || randomInt(4) < 1 ? '*' : items[randomInt(items.length)]
-  const color = color_ || randomInt(4) < 1 ? '*' : colors[randomInt(colors.length)]
+  const item = item_ || (randomInt(4) < 1 ? '*' : items[randomInt(items.length)])
+  const color = color_ || (randomInt(4) < 1 ? '*' : colors[randomInt(colors.length)])
   const discount = discount_ || (randomInt(4) + 1) / 10
 
   return {

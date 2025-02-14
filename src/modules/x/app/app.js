@@ -15,6 +15,11 @@ export default class App extends LightningElement {
         setInterval(() => { window.shopState.value.changeSale() }, 10000)
     }
 
+    putCurrentItemOnSale() {
+        const { item, color } = this.shopState.value.currentItem
+        this.shopState.value.changeSale(item, color)
+    }
+
     selectGreenBoots() {
         this.shopState.value.selectItem('boots', 'green')
     }
