@@ -1,0 +1,25 @@
+<template>
+    <select name="color" onchange={changeColor}>
+        <template for:each={colorOptions} for:item="color">
+            <option key={color.name} value={color.name} selected={color.selected}>{color.name}</option>
+        </template>
+    </select>
+
+    &nbsp;
+
+    <select name="item" onchange={changeItem}>
+        <template for:each={itemOptions} for:item="item">
+            <option key={item.name} value={item.name} selected={item.selected}>{item.name}</option>
+        </template>
+    </select>
+
+    <div>
+        selected item: {stateManager.value.currentItem.color} {stateManager.value.currentItem.item} <s>{strikethroughPrice}</s> {price}
+        <br/>
+
+        <x-itemimage item={stateManager.value.currentItem}></x-itemimage>
+        <br/>
+        <button onclick={stateManager.value.addToCart}>Add to cart</button>
+    </div>
+
+</template>

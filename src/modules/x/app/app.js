@@ -1,16 +1,16 @@
 import { LightningElement } from 'lwc';
-import { marvelousStateMgr, tickSignal } from '../../../state.ts';
+import myShopStateManager from '../../../state.ts';
 
 export default class App extends LightningElement {
-  secondsSinceRender = tickSignal();
-  blue = marvelousStateMgr(this.secondsSinceRender);
-  green = marvelousStateMgr(32, 'Banner');
+    stateManager = myShopStateManager()
 
-  clickBlue() {
-    this.blue.value.graduate();
-  }
+    constructor() {
+        super()
+        window.stateManager = this.stateManager
+        setInterval(() => { window.stateManager.value.changeSale() }, 5000)
+    }
 
-  clickGreen() {
-    this.green.value.celebrateBirthday();
-  }
+    selectGreenBoots() {
+        this.stateManager.value.selectItem('boots', 'green')
+    }
 }
