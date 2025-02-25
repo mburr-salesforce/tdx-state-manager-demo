@@ -1,14 +1,14 @@
 <template>
     <x-header></x-header>
-    <hr/>
     <x-details></x-details>
-    <hr/>
     <x-footer></x-footer>
 
-    <br/><br/><br/>
-
-    Demo tools:<br/>
-    <button onclick={shopState.value.emptyCart}>Empty cart</button>&nbsp;
-    <button onclick={selectGreenBoots}>Select green boots</button>&nbsp;
-    <button onclick={putCurrentItemOnSale}>Sale on current item</button>&nbsp;
+    <section class="demo-tools">
+        <h2>Demo tools</h2>
+        <div class="controls">
+            <button onclick={shopState.value.emptyCart}>Empty cart</button>&nbsp;
+            <button onclick={selectGreenBoots}>Select green boots</button>&nbsp;
+            <button onclick={putCurrentItemOnSale}>Sale on current item</button>&nbsp;
+        </div>
+    </section>
 </template>
