@@ -7,8 +7,7 @@ export default class App extends LightningElement {
     constructor() {
         super()
         // Using the window to share the state manager is a temporary hack. Child
-        // components will eventually be able to retrieve it from their context
-        // or receive it as a property value.
+        // components will eventually be able to retrieve it from their context.
         window.shopState = this.shopState
 
         // change what's on sale every 10s
