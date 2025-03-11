@@ -1,9 +1,8 @@
-import { LightningElement } from "lwc"
-import { colors, items } from '../shopState/shopState.js';
+import { LightningElement, api } from "lwc"
+import { colors, items } from 'x/shopState';
 
 export default class Details extends LightningElement {
-    // temporary hack until fromContext() is available
-    shopState = window.shopState
+    @api shopState
 
     // selects a new item
     changeItem(event) {
