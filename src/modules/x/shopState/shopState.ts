@@ -52,7 +52,8 @@ const sale = (item_?: string, color_?: string, discount_?: number): Sale => {
 
 // Creator function for the state manager for the shop. Each invocation of this function
 // creates a new set of state information.
-export const createShopStateManager = defineState((atom, computed, update, _fromContext) => () => {
+export const createShopStateManager = defineState(({ atom, computed, setAtom }) => () => {
+    atom
     // item currently selected
     const currentItem = atom<Item>({
         item: items[0],
@@ -65,33 +66,27 @@ export const createShopStateManager = defineState((atom, computed, update, _from
 
     // price of the current item, taking currentSale into account
     const currentItemPrice = computed(
-        { currentItem, currentSale },
-        ({ currentItem, currentSale }: { currentItem: Item, currentSale: Sale}) =>
-            currentItem.price *
-            ((currentSale.item === '*' || currentItem.item === currentSale.item) &&
-             (currentSale.color === '*' || currentItem.color === currentSale.color)
-            ? 1 - currentSale.discount
+        [ currentItem, currentSale ],
+        () =>
+            currentItem.value.price *
+            ((currentSale.value.item === '*' || currentItem.value.item === currentSale.value.item) &&
+             (currentSale.value.color === '*' || currentItem.value.color === currentSale.value.color)
+            ? 1 - currentSale.value.discount
             : 1))
 
     // change what's on sale, either randomly or to the specified item(s)
-    const changeSale = update(
-        { currentSale },
-        (_, item?: string, color?: string, discount?: number) => ({
-            currentSale: sale(item, color, discount)
-        })
-    )
+    const changeSale = (item?: string, color?: string, discount?: number) => {
+        setAtom(currentSale, sale(item, color, discount))
+    }
 
     // change the currently selected item
-    const selectItem = update(
-        { currentItem },
-        (_, item: string, color: string) => ({
-            currentItem: {
-                item,
-                color,
-                price: price({ item, color })
-            }
+    const selectItem = (item: string, color: string) => {
+        setAtom(currentItem, {
+            item,
+            color,
+            price: price({ item, color })
         })
-    )
+    }
 
     // current cart
     const cart = atom<Cart>({
@@ -99,31 +94,29 @@ export const createShopStateManager = defineState((atom, computed, update, _from
     })
 
     // add current item to cart
-    const addToCart = update(
-        { currentItem, currentItemPrice, cart },
-        ({ currentItem, currentItemPrice, cart }) => ({
-            cart: {
-                items: [
-                    ...cart.items,
-                    {
-                        ...currentItem,
-                        price: currentItemPrice,
-                    }
-                ],
-            }
+    const addToCart = () => {
+        setAtom(cart, {
+            items: [
+                ...cart.value.items,
+                {
+                    ...currentItem.value,
+                    price: currentItemPrice.value,
+                }
+            ],
         })
-    )
+    }
 
     // empty cart
-    const emptyCart = update({ cart }, _ => ({
-        cart: {
+    const emptyCart = () => {
+        setAtom(cart, {
             items: []
-        }
-    }))
+        })
+    }
 
     // total cost of items in cart
-    const cartTotal = computed({ cart }, ({ cart }: { cart: Cart }) =>
-        cart.items.reduce((total, item) => total + item.price, 0))
+    const cartTotal = computed(
+        [ cart ],
+        () => cart.value.items.reduce((total, item) => total + item.price, 0))
 
     return {
         addToCart,
